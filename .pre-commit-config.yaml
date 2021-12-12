@@ -9,6 +9,7 @@ repos:
     rev: 3.9.2
     hooks:
     - id: flake8
+      args: ['--ignore=F401']
       stages: [commit]
 -   repo: local
     hooks:
