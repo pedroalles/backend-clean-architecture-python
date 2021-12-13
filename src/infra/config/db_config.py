@@ -17,9 +17,9 @@ class DBConnectionHandler:
         engine = create_engine(self.__conection_string)
         return engine
 
-    def __start__(self):
+    def __enter__(self):
         session_maker = sessionmaker()
-        self.session = session_maker(self.get_engine())
+        self.session = session_maker(bind=self.get_engine())
         return self
 
     def __exit__(self, exc_type, exc_val, exc_tb):
