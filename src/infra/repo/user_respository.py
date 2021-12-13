@@ -8,11 +8,11 @@ class UserRepository:
     """Class to manage User Repository"""
 
     @classmethod
-    def insert_user(cls, name: str, password: str):
+    def insert_user(cls, name: str, password: str) -> Users:
         """insert data in user entity
         :param - name: user name
                - password: user password
-        :return
+        :return - tuple with new user iserted
         """
 
         InsertData = namedtuple("Users", ["id", "name", "password"])
