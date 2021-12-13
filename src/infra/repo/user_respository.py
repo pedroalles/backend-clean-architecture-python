@@ -3,8 +3,10 @@ from src.domain.models import Users as UsersModel
 from src.infra.config import DBConnectionHandler
 from src.infra.entities import Users
 
+from src.data.interfaces import UserRepositoryInterface
 
-class UserRepository:
+
+class UserRepository(UserRepositoryInterface):
     """Class to manage User Repository"""
 
     @classmethod
