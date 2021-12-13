@@ -1,3 +1,4 @@
+from typing import List
 from src.infra.config import DBConnectionHandler
 from src.domain.models import Pets as PetsModels
 from src.infra.entities import Pets
@@ -36,3 +37,48 @@ class PetRepository:
                 db_connection.session.close()
 
             return None
+
+    @classmethod
+    def select_pet(cls, pet_id: int = None, user_id: int = None) -> List[Pets]:
+        """Select data in pets entity by pet_id and/or user_id
+        :param - pet_id: Id of the registry
+               - user_id: Id of the owner
+        :return - List with Pets selected
+        """
+
+        try:
+            query_data = None
+
+            if pet_id and not user_id:
+                with DBConnectionHandler() as db_connection:
+
+                    data = db_connection.session.query(Pets).filter_by(id=pet_id).one()
+                    query_data = [data]
+
+            elif not pet_id and user_id:
+                with DBConnectionHandler() as db_connection:
+
+                    data = (
+                        db_connection.session.query(Pets)
+                        .filter_by(user_id=user_id)
+                        .all()
+                    )
+                    query_data = data
+
+            elif pet_id and user_id:
+                with DBConnectionHandler() as db_connection:
+
+                    data = (
+                        db_connection.session.query(Pets)
+                        .filter_by(id=pet_id, user_id=user_id)
+                        .one()
+                    )
+                    query_data = [data]
+
+            return query_data
+
+        except:
+            db_connection.session.rollback()
+            raise
+        finally:
+            db_connection.session.close()

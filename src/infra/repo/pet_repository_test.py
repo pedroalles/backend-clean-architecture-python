@@ -1,5 +1,7 @@
 from faker import Faker
 from src.infra.config import DBConnectionHandler
+from src.infra.entities import Pets
+from src.infra.entities.pets import AnimalTypes
 from .pet_repository import PetRepository
 
 faker = Faker()
@@ -37,22 +39,30 @@ def test_insert_pet():
     delete_by_id(engine, new_pet.id)
 
 
-# def test_select_user():
-#     """should select a user in Users table and compare it"""
+def test_select_pet():
+    """should select a pet in Pets table and compare it"""
 
-#     user_id = faker.random_number(digits=5)
-#     name = faker.name()
-#     password = faker.word()
-#     data = Users(id=user_id, name=name, password=password)
-#     engine = db_connection_handler.get_engine()
-#     query = f"INSERT INTO users (id, name, password) VALUES ('{user_id}', '{name}', '{password}')"
-#     engine.execute(query)
-#     query_user1 = user_repository.select_user(user_id=user_id)
-#     query_user2 = user_repository.select_user(name=name)
-#     query_user3 = user_repository.select_user(user_id=user_id, name=name)
+    pet_id = faker.random_number(digits=5)
+    name = faker.name()
+    specie = "fish"
+    age = faker.random_number(digits=1)
+    user_id = faker.random_number()
 
-#     assert data in query_user1
-#     assert data in query_user2
-#     assert data in query_user3
+    specie_mock = AnimalTypes("fish")
+    data = Pets(id=pet_id, name=name, specie=specie_mock, age=age, user_id=user_id)
 
-#     delete_by_id(engine, user_id)
+    engine = db_connection_handler.get_engine()
+    query = (
+        "INSERT INTO pets (id, name, specie, age, user_id)"
+        + f"VALUES ('{pet_id}', '{name}', '{specie}', '{age}', '{user_id}');"
+    )
+    engine.execute(query)
+    query_pet1 = pet_repository.select_pet(pet_id=pet_id)
+    query_pet2 = pet_repository.select_pet(user_id=user_id)
+    query_pet3 = pet_repository.select_pet(pet_id=pet_id, user_id=user_id)
+
+    assert data in query_pet1
+    assert data in query_pet2
+    assert data in query_pet3
+
+    delete_by_id(engine, pet_id)

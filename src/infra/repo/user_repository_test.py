@@ -38,7 +38,7 @@ def test_select_user():
     password = faker.word()
     data = Users(id=user_id, name=name, password=password)
     engine = db_connection_handler.get_engine()
-    query = f"INSERT INTO users (id, name, password) VALUES ('{user_id}', '{name}', '{password}')"
+    query = f"INSERT INTO users (id, name, password) VALUES ('{user_id}', '{name}', '{password}');"
     engine.execute(query)
     query_user1 = user_repository.select_user(user_id=user_id)
     query_user2 = user_repository.select_user(name=name)
